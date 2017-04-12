@@ -4,7 +4,7 @@ pipeline {
         stages {
             stage("Base Box") {
                 environment {
-                    VAGRANT_VAGRANTFILE=vagranty
+                    VAGRANT_VAGRANTFILE = 'vagranty'
                 }
                 steps {
                     vagrant up
