@@ -7,7 +7,7 @@ pipeline {
                     VAGRANT_VAGRANTFILE = 'vagranty'
                 }
                 steps {
-                    vagrant up
+                    sh 'vagrant up'
                 }
             }
         }
