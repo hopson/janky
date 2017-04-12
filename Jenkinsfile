@@ -4,7 +4,9 @@ node{
         environment {
             VAGRANT_VAGRANTFILE=vagranty
         }
-        vagrant up
+        steps {
+            vagrant up
+        }
     }
 
 }
