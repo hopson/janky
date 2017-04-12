@@ -14,7 +14,7 @@ pipeline {
     }
     post {
         always {
-            sh 'vagrant destroy'
+            sh 'vagrant destroy --force'
         }
     }
 }
