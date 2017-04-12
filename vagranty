@@ -1,0 +1,63 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+Vagrant.configure("2") do |config|
+  # Fixes the error "stdin: is not a tty" on Ubuntu boxes
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
+  config.vm.define :'opal-vagrant' do |ov|
+  end
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = "ubuntu/trusty64"
+  config.ssh.username = "ubuntu"
+  config.ssh.forward_agent = true
+  config.vm.hostname = "jenky"
+
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "jenky"
+    # Set memory and CPUs to leverage resources on host
+    vb.customize ["modifyvm", :id, "--memory", host_memory]
+    vb.customize ["modifyvm", :id, "--cpus", host_processors]
+
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
+  end
+
+  config.vm.network "private_network", type: "dhcp"
+
+  #config.vm.provision :ansible do |ansible|
+  #  ansible.playbook = "playbooks/bootstrap.yml"
+  #  ansible.verbose = "v"
+  #end
+end
+
+# Determines the host OS
+def host
+  RbConfig::CONFIG['host_os']
+end
+
+# Determines the number of processors available on machine
+def host_processors
+  case host
+  when /darwin/
+    `sysctl -n hw.ncpu`.to_i
+  when /linux/
+    `nproc`.to_i
+  else
+    1
+  end
+end
+
+# Determines the amount of memory on the machine
+def host_memory
+  return 1024
+  #case host
+  #when /darwin/
+  #  `sysctl -n hw.memsize`.to_i / 1024 / 1024 / 4
+  #when /linux/
+  #  `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 4
+  #else
+  #  1024
+  #end
+end
