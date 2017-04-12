@@ -1,14 +1,20 @@
 // vi: set ft=groovy sw=4 ts=4 si ai :
 pipeline {
     agent any
-        stages {
-            stage("Base Box") {
-                environment {
-                    VAGRANT_VAGRANTFILE = 'vagranty'
-                }
-                steps {
-                    sh 'vagrant up'
-                }
+    environment {
+        VAGRANT_VAGRANTFILE = 'vagranty'
+    }
+
+    stages {
+        stage("Base Box") {
+            steps {
+                sh 'vagrant up'
             }
         }
+    }
+    post {
+        always {
+            sh 'vagrant destroy'
+        }
+    }
 }
