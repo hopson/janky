@@ -8,7 +8,8 @@ pipeline {
     stages {
         stage("Base Box") {
             steps {
-                sh 'vagrant up'
+                sh 'vagrant up --provision'
+                junit '*.xml'
             }
         }
     }
